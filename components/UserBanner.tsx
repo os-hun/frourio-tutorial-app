@@ -6,47 +6,34 @@ import type { ChangeEvent } from 'react'
 
 const UserBanner = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [token, setToken] = useState('')
   const [userInfo, setUserInfo] = useState({} as UserInfo)
 
-  const editIcon = useCallback(
-    async (e: ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.files?.length) return
+  const editIcon = useCallback(async (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files?.length) return
 
-      setUserInfo(
-        await apiClient.user.$post({
-          headers: { authorization: token },
-          body: { icon: e.target.files[0] }
-        })
-      )
-    },
-    [token]
-  )
+    setUserInfo(
+      await apiClient.user.$post({
+        body: { icon: e.target.files[0] }
+      })
+    )
+  }, [])
 
   const login = useCallback(async () => {
     const id = prompt('Enter the user id (See server/.env)')
     const pass = prompt('Enter the user pass (See server/.env)')
     if (!id || !pass) return alert('Login failed')
 
-    let newToken = ''
-
     try {
-      newToken = `Bearer ${
-        (await apiClient.token.$post({ body: { id, pass } })).token
-      }`
-      setToken(newToken)
+      await apiClient.token.$post({ body: { id, pass } })
     } catch (e) {
       return alert('Login failed')
     }
 
-    setUserInfo(
-      await apiClient.user.$get({ headers: { authorization: newToken } })
-    )
+    setUserInfo(await apiClient.user.$get())
     setIsLoggedIn(true)
   }, [])
 
   const logout = useCallback(() => {
-    setToken('')
     setIsLoggedIn(false)
   }, [])
 

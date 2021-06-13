@@ -5,6 +5,5 @@ export type UserInfo = {
 }
 
 export type AuthHeader = {
-  authorization: string
   cookie?: string
 }
