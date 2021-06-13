@@ -6,5 +6,8 @@ export type Methods = {
     resBody: {
       token: string
     }
+    resHeaders: {
+      'Set-Cookie': string
+    }
   }
 }

@@ -3,8 +3,18 @@ import { validateUser } from '$/service/user'
 
 export default defineController((fastify) => ({
   post: ({ body }) => {
-    return validateUser(body.id, body.pass)
-      ? { status: 201, body: { token: fastify.jwt.sign({ id: body.id }) } }
-      : { status: 401 }
+    if (validateUser(body.id, body.pass)) {
+      const token = fastify.jwt.sign({ id: body.id })
+
+      return {
+        status: 201,
+        body: { token },
+        headers: {
+          'Set-Cookie': `smart_token=${token}; domain=localhost; path=/; httpOnly=true;`
+        }
+      }
+    } else {
+      return { status: 401 }
+    }
   }
 }))

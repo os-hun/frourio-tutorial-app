@@ -4,10 +4,12 @@ import helmet from 'fastify-helmet'
 import cors from 'fastify-cors'
 import fastifyStatic from 'fastify-static'
 import fastifyJwt from 'fastify-jwt'
+import cookie, { FastifyCookieOptions } from 'fastify-cookie'
 import {
   API_JWT_SECRET,
   API_BASE_PATH,
-  API_UPLOAD_DIR
+  API_UPLOAD_DIR,
+  API_COOKIE_SECRET
 } from '$/service/envValues'
 import server from '$/$server'
 
@@ -31,6 +33,9 @@ export const init = (serverFactory?: FastifyServerFactory) => {
       })
     })
   }
+  app.register(cookie, {
+    secret: API_COOKIE_SECRET
+  } as FastifyCookieOptions)
   app.register(fastifyJwt, {
     secret: API_JWT_SECRET,
     cookie: {
