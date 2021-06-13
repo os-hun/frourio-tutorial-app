@@ -4,10 +4,7 @@ export type Methods = {
   post: {
     reqBody: LoginBody
     resBody: {
-      token: string
-    }
-    resHeaders: {
-      'Set-Cookie': string
+      message: string
     }
   }
 }

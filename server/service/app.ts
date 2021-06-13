@@ -39,7 +39,7 @@ export const init = (serverFactory?: FastifyServerFactory) => {
   app.register(fastifyJwt, {
     secret: API_JWT_SECRET,
     cookie: {
-      cookieName: 'smart_token',
+      cookieName: 'smart_api_token',
       signed: false
     }
   })
