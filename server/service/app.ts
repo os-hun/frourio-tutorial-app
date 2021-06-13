@@ -14,7 +14,10 @@ import server from '$/$server'
 export const init = (serverFactory?: FastifyServerFactory) => {
   const app = Fastify({ serverFactory })
   app.register(helmet)
-  app.register(cors)
+  app.register(cors, {
+    origin: 'http://localhost:8000',
+    credentials: true
+  })
   app.register(fastifyStatic, {
     root: path.join(__dirname, 'static'),
     prefix: '/static/'
@@ -28,7 +31,13 @@ export const init = (serverFactory?: FastifyServerFactory) => {
       })
     })
   }
-  app.register(fastifyJwt, { secret: API_JWT_SECRET })
+  app.register(fastifyJwt, {
+    secret: API_JWT_SECRET,
+    cookie: {
+      cookieName: 'smart_token',
+      signed: false
+    }
+  })
   server(app, { basePath: API_BASE_PATH })
   return app
 }
